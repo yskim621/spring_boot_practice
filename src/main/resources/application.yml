@@ -1,7 +1,7 @@
 
 spring:
   datasource:
-    url: jdbc:h2:~/jpashop;MVCC=TRUE
+    url: jdbc:h2:~/jpashop
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -12,24 +12,22 @@ spring:
     properties:
       hibernate:
 #        show_sql: true
-        format: true
+        format_sql: true
 
   devtools:
-    # ?? ???? ??? ?? ? ?? ????.
     livereload:
       enabled: true
 
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .xhtml
-    # thymeleaf? ?? ??? ??? ???. false ??(???? true)
     cache: false
-    # templates ????? ??? ??? ??? ??, ??? ??? ?????.
-    check-template-location: true
+#    check-template-location: true
 
 logging:
   level:
     org.hibernate.SQL: debug
+    org.hibernate.type: trace
 
 
 
