@@ -1,6 +1,8 @@
 package jpabook.jpashop.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -8,11 +10,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "orders")
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
 
     @Id
@@ -24,10 +28,12 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = ALL) // cascade 속성 - All로 적용 시 Order를 persist하면 연계돼서 persist 됨
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL) // Order에 FK를 둠
+    // cascade의 적용 가이드 라인은 private owner로 다른 곳에서 참조하지 않고 해당 클래스에서만 관리 시 적용
+    // 즉, Order에서만 OrderItem과 Delivery를 참조(사용)하기 때문에 이와 같은 경우만 사용 < LifeCycle이 같음 >
+   @OneToOne(fetch = LAZY, cascade = ALL) // Order에 FK를 둠
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
@@ -75,9 +81,25 @@ public class Order {
             throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가능합니다.");
         }
         this.setStatus(OrderStatus.CANCEL);
-        for (OrderItem orderItem : orderItems) {
-            orderItem.cancel();
-        }
+        orderItems.forEach(OrderItem::cancel);
     }
+
+    //==조회 로직==//
+
+    /**
+     * 전체 주문 가격 조회
+     */
+    public int getTotalPrice() {
+        /*
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+        아래의 로직과 같은 코드
+        */
+        return orderItems.stream().mapToInt(OrderItem::getTotalPrice).sum();
+    }
+
 
 }
