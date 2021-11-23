@@ -33,7 +33,7 @@ public class Order {
 
     // cascade의 적용 가이드 라인은 private owner로 다른 곳에서 참조하지 않고 해당 클래스에서만 관리 시 적용
     // 즉, Order에서만 OrderItem과 Delivery를 참조(사용)하기 때문에 이와 같은 경우만 사용 < LifeCycle이 같음 >
-   @OneToOne(fetch = LAZY, cascade = ALL) // Order에 FK를 둠
+    @OneToOne(fetch = LAZY, cascade = ALL) // Order에 FK를 둠
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
