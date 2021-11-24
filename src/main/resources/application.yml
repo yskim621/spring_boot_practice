@@ -18,12 +18,6 @@ spring:
     livereload:
       enabled: true
 
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .xhtml
-    cache: false
-#    check-template-location: true
-
 logging:
   level:
     org.hibernate.SQL: debug
