@@ -24,7 +24,7 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY) // 지연 로딩의 경우, Order 사용 시 JPA가 proxy로 객체를 생성해서 해당 객체를 초기화(byteBuddyInterceptor 클래스 객체)
     @JoinColumn(name = "member_id")
     private Member member;
 
