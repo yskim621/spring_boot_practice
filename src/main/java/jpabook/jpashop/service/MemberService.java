@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor // 생성자에 @Autowired < 생성자 인잭션 > 과 같은 기능
 public class MemberService {
 
+    // Interface 생성 시 Spring Data JPA가 구현체를 주입시킴
     private final MemberRepository memberRepository;
     private final MemberRepositoryOld memberRepositoryOld;
 
